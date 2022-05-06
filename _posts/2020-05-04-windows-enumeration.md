@@ -1,6 +1,19 @@
 ---
-title: Windows Cheet-Sheet by Cyb3r3xpl0it.
-date: 2020-10-04 11:51:25 +/-0800 
+layout: single
+title: Windows Cheet-Sheet
+excerpt: "En el siguiente artículo veremos como realizar una enumeración al momento de estar en un pentesting sobre windows"
+date: 2020-01-31
+classes: wide
+header:
+  teaser: /assets/img/posts/windows-enum/windows.jpg
+  teaser_home_page: true
+categories:
+  - RedTeam
+  - Enumeration
+tags:
+  - Hacking
+  - Windows
+  - Red Team
 ---
 
 ![windows](/assets/img/posts/windows-enum/windows.jpg)
