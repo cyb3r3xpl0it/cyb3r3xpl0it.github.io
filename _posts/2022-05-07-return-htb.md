@@ -131,3 +131,64 @@ smbmap -H return.local -u "svc-printer" -p "1edFg43012\!\!" -r C$/Users/svc-prin
 
 Con las credenciales que obtuvimos anteriormente de igual forma podremos obtener una shell interactiva usando [Evil-WinRM](https://github.com/Hackplayers/evil-winrm)  
 ![shell-evil-winrm](/assets/img/posts/HTB/return/shell-evilwinrm.png)
+
+### Recopilación de Información del Usuario
+Ahora que tenemos una shell interactiva podemos investigar, usuarios, grupos y permisos.
+- whoami
+- whoami /groups
+- net users
+- net groups 
+- net usr svc-printer  
+![evilwinrm-enum-01](/assets/img/posts/HTB/return/evilwinrm-enum-01.png)
+![evilwinrm-enum-02](/assets/img/posts/HTB/return/evilwinrm-enum-02.png)
+![evilwinrm-enum-03](/assets/img/posts/HTB/return/evilwinrm-enum-03.png)
+
+Arriba hemos recopilado mucha información útil, lo más interesante que vemos es que nuestro usuario está en los grupos de Operadores del servidor. Detallado [aquí](https://docs.microsoft.com/en-us/windows/security/identity-protection/access-control/active-directory-security-groups#bkmk-serveroperators) vemos que esto nos da:
+
+```console
+Members of the Server Operators group can sign in to a server interactively,
+create and delete network shared resources, start and stop services,
+back up and restore files, format the hard disk drive of the computer,
+and shut down the computer.
+```
+### Configuración de Servicios
+
+El enfoque de nuestro próximo paso es interactuar con los servicios. Podemos ver desde dentro de Evil-WinRM a qué tenemos acceso:  
+![evilwinrm-services](/assets/img/posts/HTB/return/evilwinrm-services.png)
+
+Primero tendremos que subir a Windows la versión de netcat.
+![nc-upload](/assets/img/posts/HTB/return/evilwinrm-01.png)
+
+Despues de subirlo trataremos de crear nuestro propio servicio:
+![own-service](/assets/img/posts/HTB/return/evilwinrm-02.png) 
+
+Luego intenté cambiar la configuración de un servidor existente para que use mi netcat en su lugar para su binario:
+![config-service](/assets/img/posts/HTB/return/evilwinrm-03.png)
+
+Finalmente obtenemos el servicios VSS y anclamos nuestro binario a este:
+![nc-vss](/assets/img/posts/HTB/return/evilwinrm-04.png)
+
+Verificamos que este servicio exista:
+![service-vss](/assets/img/posts/HTB/return/evilwinrm-05.png)
+
+Antes de iniciarlo tendremos que poner a la escuche netcat en lel puerto especificado:
+
+```console
+nc -nvlp 4444
+```
+
+Iniciamos el servicio:
+
+![create-service](/assets/img/posts/HTB/return/evilwinrm-06.png)
+
+### Obtenemos Shell de Administrador
+
+Una vez iniciado el servicio nos arrojara una shell en netcat.
+![create-service](/assets/img/posts/HTB/return/evilwinrm-07.png)
+
+Ahora unicamente tendremos que encontrar nuestra bandera de root:  
+  
+Cabe mencionar que las acciones las tendremos que hacer rápido ya que en cierto tiempo de termina el servicio y tendremos que volver iniciar netcat junto con el servicio:
+![create-service](/assets/img/posts/HTB/return/evilwinrm-08.png)
+
+Good Luck! and Happy Hacking!
