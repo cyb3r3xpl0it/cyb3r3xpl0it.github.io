@@ -1,11 +1,10 @@
 ---
 layout: single
 title: Return Writeup HTB (OSCP Style)
-excerpt: "En el siguiente artículo veremos como realizar una enumeración al mome
-nto de estar en un pentesting sobre windows"
+excerpt: "En el siguiente articulo veremos como realizar la explotacipón de  Return en HTB"
 date: 2022-05-07
 classes: wide
-image: /assets/img/posts/HTB/driver/driver.png
+image: /assets/img/posts/HTB/return/return.png
 categories:
   - HTB
 tags:
@@ -86,7 +85,7 @@ Observando la contraseña se encuentra cifrada, por lo cual buscando en la red n
 
 ### Crackmapexec
 
-Ahora que tenemos las credenciales, trataremos de obtener más información con Crackmapexec.
+Ahora que tenemos las credenciales, trataremos de obtener más información con Crackmapexec.  
 ![cmd-cred](/assets/img/posts/HTB/return/cme-cred.png)
 
 ### SMBMap
@@ -162,7 +161,7 @@ Primero tendremos que subir a Windows la versión de netcat.
 Despues de subirlo trataremos de crear nuestro propio servicio:
 ![own-service](/assets/img/posts/HTB/return/evilwinrm-02.png) 
 
-Luego intenté cambiar la configuración de un servidor existente para que use mi netcat en su lugar para su binario:
+Luego intenté cambiar la configuración de un servidor existente para que use mi netcat en su lugar para su binario:  
 ![config-service](/assets/img/posts/HTB/return/evilwinrm-03.png)
 
 Finalmente obtenemos el servicios VSS y anclamos nuestro binario a este:
